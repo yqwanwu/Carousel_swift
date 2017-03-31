@@ -15,6 +15,7 @@
 		9615DDE51E8CD5FB002C3FB3 /* CarouselCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9615DDE31E8CD5FB002C3FB3 /* CarouselCollectionView.swift */; };
 		9615DDE61E8CD5FB002C3FB3 /* CommonProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9615DDE41E8CD5FB002C3FB3 /* CommonProxy.swift */; };
 		9615DDE81E8CD7A4002C3FB3 /* TestCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9615DDE71E8CD7A4002C3FB3 /* TestCollectionViewCell.swift */; };
+		9615DDEC1E8CFFBE002C3FB3 /* TimerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9615DDEB1E8CFFBE002C3FB3 /* TimerExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		9615DDE31E8CD5FB002C3FB3 /* CarouselCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselCollectionView.swift; sourceTree = "<group>"; };
 		9615DDE41E8CD5FB002C3FB3 /* CommonProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonProxy.swift; sourceTree = "<group>"; };
 		9615DDE71E8CD7A4002C3FB3 /* TestCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestCollectionViewCell.swift; sourceTree = "<group>"; };
+		9615DDEB1E8CFFBE002C3FB3 /* TimerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 		9615DDD01E8CD5E3002C3FB3 /* Carousel */ = {
 			isa = PBXGroup;
 			children = (
+				9615DDEB1E8CFFBE002C3FB3 /* TimerExtension.swift */,
 				9615DDE31E8CD5FB002C3FB3 /* CarouselCollectionView.swift */,
 				9615DDE41E8CD5FB002C3FB3 /* CommonProxy.swift */,
 				9615DDE71E8CD7A4002C3FB3 /* TestCollectionViewCell.swift */,
@@ -151,6 +154,7 @@
 				9615DDD41E8CD5E3002C3FB3 /* ViewController.swift in Sources */,
 				9615DDD21E8CD5E3002C3FB3 /* AppDelegate.swift in Sources */,
 				9615DDE61E8CD5FB002C3FB3 /* CommonProxy.swift in Sources */,
+				9615DDEC1E8CFFBE002C3FB3 /* TimerExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +318,7 @@
 				9615DDE21E8CD5E3002C3FB3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

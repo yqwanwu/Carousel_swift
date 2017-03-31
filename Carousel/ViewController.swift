@@ -16,7 +16,8 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         super.viewDidLoad()
         carouselView.delegate = self
         carouselView.dataSource = self
-//        carouselView.scrollDirection = .vertical
+        //修改此处，，改变滚动方向
+        carouselView.scrollDirection = .vertical
     }
 
     //MARK: 代理

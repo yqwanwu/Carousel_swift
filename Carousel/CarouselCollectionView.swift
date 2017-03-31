@@ -26,6 +26,19 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     class _CarouselCollectionViewDelegateProxy: CommonProxy, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
         
     }
+    
+    lazy var timer: Timer = {
+        let t = Timer.scheduledTimer(self.timing, action: { [unowned self] (t) in
+            //todo 增加timer
+            let idx = IndexPath(row: self.currentIndexPath.row + 1, section: self.currentIndexPath.section)
+            self.currentIndexPath = idx
+            self.scrollToItem(at: idx, at: self.scrollDirection == .horizontal ? .centeredHorizontally : .centeredVertically, animated: true)
+            self.pageControl.currentPage = self.currentIndexPath.row % self.itemCount
+        }, userInfo: nil, repeats: true)
+        
+        return t
+    } ()
+    var timing: TimeInterval = 4.0
 
     weak fileprivate var originalDataSource: UICollectionViewDataSource?
     weak fileprivate var originalDelegate: UICollectionViewDelegate?
@@ -130,6 +143,7 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         pageControl.pageIndicatorTintColor = UIColor.white
         pageControl.hidesForSinglePage = true
         pageControl.isUserInteractionEnabled = false
+        timer.fireDate = Date().addingTimeInterval(self.timing)
     }
     
     override func layoutSubviews() {
@@ -151,9 +165,9 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
 //                goToIndex(idx: IndexPath(item: indexPath.row % self.itemCount, section: 0))
 //                return
                 if let cell = self.cellForItem(at: indexPath) {
-                    let destinationX = scrollDirection == .horizontal ? x - (x + bounds.width / 2) + cell.center.x : x
+                    let destinationX = scrollDirection == .horizontal ? cell.center.x - bounds.width / 2 : x
                  
-                    let destinationY = scrollDirection == .vertical ? y - (y + bounds.height / 2) + cell.center.y : y
+                    let destinationY = scrollDirection == .vertical ? cell.center.y - bounds.height / 2 : y
                     self.setContentOffset(CGPoint(x: destinationX, y: destinationY), animated: true)
 
                 }
@@ -164,9 +178,12 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     
     fileprivate func goToIndex(idx: IndexPath) {
         super.scrollToItem(at: idx, at: scrollDirection == .horizontal ? .centeredHorizontally : .centeredVertically, animated: false)
+        pageControl.currentPage = currentIndexPath.row % itemCount
+        currentIndexPath = idx
     }
     
     deinit {
+        timer.invalidate()
         print("轮播图 销毁")
     }
 }
@@ -222,6 +239,7 @@ extension CarouselCollectionView {
             goToIndex(idx: IndexPath(item: realSize / 2 + currentIndexPath.row % self.itemCount, section: 0))
         }
         isSetupedPosition = true
+        self.timer.fireDate = Date.distantFuture
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
@@ -230,6 +248,7 @@ extension CarouselCollectionView {
         }
         
         goToIndex(idx: IndexPath(item: realSize / 2 + currentIndexPath.row % self.itemCount, section: 0))
+        self.timer.fireDate = Date().addingTimeInterval(timing)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -237,6 +256,7 @@ extension CarouselCollectionView {
             d.scrollViewDidEndDecelerating?(scrollView)
         }
         resetAnimation()
+        self.timer.fireDate = Date().addingTimeInterval(timing)
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
