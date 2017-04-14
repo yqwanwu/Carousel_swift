@@ -16,6 +16,7 @@
 		9615DDE61E8CD5FB002C3FB3 /* CommonProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9615DDE41E8CD5FB002C3FB3 /* CommonProxy.swift */; };
 		9615DDE81E8CD7A4002C3FB3 /* TestCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9615DDE71E8CD7A4002C3FB3 /* TestCollectionViewCell.swift */; };
 		9615DDEC1E8CFFBE002C3FB3 /* TimerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9615DDEB1E8CFFBE002C3FB3 /* TimerExtension.swift */; };
+		96195FA61EA0AF77008ACB33 /* gif5新文件.gif in Resources */ = {isa = PBXBuildFile; fileRef = 96195FA51EA0AF77008ACB33 /* gif5新文件.gif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		9615DDE41E8CD5FB002C3FB3 /* CommonProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonProxy.swift; sourceTree = "<group>"; };
 		9615DDE71E8CD7A4002C3FB3 /* TestCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestCollectionViewCell.swift; sourceTree = "<group>"; };
 		9615DDEB1E8CFFBE002C3FB3 /* TimerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerExtension.swift; sourceTree = "<group>"; };
+		96195FA51EA0AF77008ACB33 /* gif5新文件.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "gif5新文件.gif"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				9615DDD81E8CD5E3002C3FB3 /* Assets.xcassets */,
 				9615DDDA1E8CD5E3002C3FB3 /* LaunchScreen.storyboard */,
 				9615DDDD1E8CD5E3002C3FB3 /* Info.plist */,
+				96195FA51EA0AF77008ACB33 /* gif5新文件.gif */,
 			);
 			path = Carousel;
 			sourceTree = "<group>";
@@ -139,6 +142,7 @@
 				9615DDDC1E8CD5E3002C3FB3 /* LaunchScreen.storyboard in Resources */,
 				9615DDD91E8CD5E3002C3FB3 /* Assets.xcassets in Resources */,
 				9615DDD71E8CD5E3002C3FB3 /* Main.storyboard in Resources */,
+				96195FA61EA0AF77008ACB33 /* gif5新文件.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

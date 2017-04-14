@@ -17,7 +17,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         carouselView.delegate = self
         carouselView.dataSource = self
         //修改此处，，改变滚动方向
-        carouselView.scrollDirection = .vertical
+        carouselView.scrollDirection = .horizontal
     }
 
     //MARK: 代理
@@ -42,6 +42,23 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        return CGSize(width: 200, height: 150)
 //    }
+    
+    
+    @IBAction func ac_vertical(_ sender: Any) {
+        carouselView.scrollDirection = .vertical
+    }
+    
+    @IBAction func ac_horizontal(_ sender: Any) {
+        carouselView.scrollDirection = .horizontal
+    }
+    
+    var flag = false
+    @IBAction func ac_pagge(_ sender: UIButton) {
+        flag = !flag
+        carouselView.isPagingEnabled = flag
+        sender.setTitle(flag ? "分页关" : "分页", for: .normal)
+    }
+    
     
     
 }
