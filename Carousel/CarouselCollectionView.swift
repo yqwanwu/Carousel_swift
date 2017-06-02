@@ -149,6 +149,7 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     override func layoutSubviews() {
         super.layoutSubviews()
         self.superview?.addSubview(pageControl)
+        pageControl.frame = CGRect(x: 0, y: self.frame.maxY - 25, width: self.frame.width, height: 20)
     }
     
     override func reloadData() {
