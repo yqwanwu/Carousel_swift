@@ -30,16 +30,19 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     lazy var timer: Timer = {
         let t = Timer.scheduledTimer(self.timing, action: { [unowned self] (t) in
             //todo 增加timer
+            if self.itemCount <= 0 {
+                return
+            }
             let idx = IndexPath(row: self.currentIndexPath.row + 1, section: self.currentIndexPath.section)
             self.currentIndexPath = idx
             self.scrollToItem(at: idx, at: self.scrollDirection == .horizontal ? .centeredHorizontally : .centeredVertically, animated: true)
             self.pageControl.currentPage = self.currentIndexPath.row % self.itemCount
-        }, userInfo: nil, repeats: true)
+            }, userInfo: nil, repeats: true)
         
         return t
     } ()
     var timing: TimeInterval = 4.0
-
+    
     weak fileprivate var originalDataSource: UICollectionViewDataSource?
     weak fileprivate var originalDelegate: UICollectionViewDelegate?
     fileprivate var realSize = 0
@@ -74,7 +77,7 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
                 dataSourceProxy?.obj = self
                 dataSourceProxy?.shouldInvokeCommonMethod = true
             } else {
-//                dataSourceProxy = nil
+                //                dataSourceProxy = nil
             }
             
             super.dataSource = dataSourceProxy
@@ -97,7 +100,7 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
                 //优先执行 本类代理方法
                 delegateProxy?.shouldInvokeCommonMethod = true
             } else {
-//                delegateProxy = nil
+                //                delegateProxy = nil
             }
             
             super.delegate = delegateProxy
@@ -137,13 +140,16 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         self.showsHorizontalScrollIndicator = false
         
         ///设置 页码
-        pageControl = UIPageControl(frame: CGRect(x: 0, y: self.frame.maxY - 40, width: self.frame.width, height: 20))
+        pageControl = UIPageControl(frame: CGRect(x: 0, y: self.frame.maxY - 25, width: self.frame.width, height: 20))
         pageControl.currentPage = 0
-        pageControl.currentPageIndicatorTintColor = UIColor.yellow
-        pageControl.pageIndicatorTintColor = UIColor.white
+        pageControl.currentPageIndicatorTintColor = UIColor.red
+        pageControl.pageIndicatorTintColor = UIColor.gray
         pageControl.hidesForSinglePage = true
         pageControl.isUserInteractionEnabled = false
         timer.fireDate = Date().addingTimeInterval(self.timing)
+        
+        //连续滑动网络图片显示不正常，
+        self.isPagingEnabled = true
     }
     
     override func layoutSubviews() {
@@ -163,14 +169,14 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         if let indexPath = self.indexPathForItem(at: CGPoint(x: x + bounds.width / 2, y: y + bounds.height / 2)) {
             currentIndexPath = indexPath
             if !self.isPagingEnabled {
-//                goToIndex(idx: IndexPath(item: indexPath.row % self.itemCount, section: 0))
-//                return
+                //                goToIndex(idx: IndexPath(item: indexPath.row % self.itemCount, section: 0))
+                //                return
                 if let cell = self.cellForItem(at: indexPath) {
                     let destinationX = scrollDirection == .horizontal ? cell.center.x - bounds.width / 2 : x
-                 
+                    
                     let destinationY = scrollDirection == .vertical ? cell.center.y - bounds.height / 2 : y
                     self.setContentOffset(CGPoint(x: destinationX, y: destinationY), animated: true)
-
+                    
                 }
             }
             pageControl.currentPage = currentIndexPath.row % itemCount
@@ -201,6 +207,7 @@ extension CarouselCollectionView {
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let realIndex = IndexPath(row: indexPath.row % itemCount, section: indexPath.section)
+        self.currentIndexPath = realIndex
         if let cell = originalDataSource?.collectionView(collectionView, cellForItemAt: realIndex) {
             return cell
         } else {
