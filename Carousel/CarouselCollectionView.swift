@@ -149,7 +149,7 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         timer.fireDate = Date().addingTimeInterval(self.timing)
         
         //连续滑动网络图片显示不正常，
-        self.isPagingEnabled = true
+        //        self.isPagingEnabled = true
     }
     
     override func layoutSubviews() {
@@ -168,6 +168,7 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         let y = self.contentOffset.y
         if let indexPath = self.indexPathForItem(at: CGPoint(x: x + bounds.width / 2, y: y + bounds.height / 2)) {
             currentIndexPath = indexPath
+            pageControl.currentPage = currentIndexPath.row % itemCount
             if !self.isPagingEnabled {
                 //                goToIndex(idx: IndexPath(item: indexPath.row % self.itemCount, section: 0))
                 //                return
@@ -179,7 +180,7 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
                     
                 }
             }
-            pageControl.currentPage = currentIndexPath.row % itemCount
+            
         }
     }
     
@@ -187,6 +188,7 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         super.scrollToItem(at: idx, at: scrollDirection == .horizontal ? .centeredHorizontally : .centeredVertically, animated: false)
         pageControl.currentPage = currentIndexPath.row % itemCount
         currentIndexPath = idx
+        pageControl.currentPage = currentIndexPath.row % itemCount
     }
     
     deinit {
@@ -207,7 +209,6 @@ extension CarouselCollectionView {
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let realIndex = IndexPath(row: indexPath.row % itemCount, section: indexPath.section)
-        self.currentIndexPath = realIndex
         if let cell = originalDataSource?.collectionView(collectionView, cellForItemAt: realIndex) {
             return cell
         } else {
