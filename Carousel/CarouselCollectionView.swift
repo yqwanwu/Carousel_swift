@@ -71,49 +71,19 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
     }
     
     override var dataSource: UICollectionViewDataSource? {
-        set {
-            if newValue != nil {
-                dataSourceProxy = _CarouselCollectionViewDataSourceProxy(delegate: newValue, commonDelegate: self)
-                dataSourceProxy?.obj = self
-                dataSourceProxy?.shouldInvokeCommonMethod = true
-            } else {
-                //                dataSourceProxy = nil
-            }
-            
+        didSet {
+            originalDataSource = dataSource
+            dataSourceProxy = dataSource == nil ? nil : _CarouselCollectionViewDataSourceProxy(delegate: dataSource, commonDelegate: self)
+            dataSourceProxy?.obj = self
             super.dataSource = dataSourceProxy
-            if !self.isEqual(newValue) {
-                originalDataSource = newValue
-            } else {
-                originalDataSource = nil
-            }
-        }
-        
-        get {
-            return dataSourceProxy
         }
     }
     
     override var delegate: UICollectionViewDelegate? {
-        set {
-            if newValue != nil {
-                delegateProxy = _CarouselCollectionViewDelegateProxy(delegate: newValue, commonDelegate: self)
-                //优先执行 本类代理方法
-                delegateProxy?.shouldInvokeCommonMethod = true
-            } else {
-                //                delegateProxy = nil
-            }
-            
+        didSet {
+            originalDelegate = delegate
+            delegateProxy = delegate == nil ? nil : _CarouselCollectionViewDelegateProxy(delegate: delegate, commonDelegate: self)
             super.delegate = delegateProxy
-            originalDelegate = newValue
-            if !self.isEqual(newValue) {
-                originalDelegate = newValue
-            } else {
-                originalDelegate = nil
-            }
-        }
-        
-        get {
-            return super.delegate
         }
     }
     
@@ -199,25 +169,29 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
 
 extension CarouselCollectionView {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let count = originalDataSource?.collectionView(collectionView, numberOfItemsInSection: section) {
-            realSize = count * (count > 100 || self.isPagingEnabled ? 4 : 100)
-            itemCount = count
+        if let od = originalDataSource, !od.isEqual(self) {
+            if let count = originalDataSource?.collectionView(collectionView, numberOfItemsInSection: section) {
+                realSize = count * (count > 100 || self.isPagingEnabled ? 4 : 100)
+                itemCount = count
+            }
         }
+        
         pageControl.numberOfPages = itemCount
         return realSize
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let realIndex = IndexPath(row: indexPath.row % itemCount, section: indexPath.section)
-        if let cell = originalDataSource?.collectionView(collectionView, cellForItemAt: realIndex) {
-            return cell
-        } else {
-            return collectionView.dequeueReusableCell(withReuseIdentifier: "placehodertmpcell", for: indexPath)
+        if let od = originalDataSource, !od.isEqual(self) {
+            if let cell = originalDataSource?.collectionView(collectionView, cellForItemAt: realIndex) {
+                return cell
+            }
         }
+        return collectionView.dequeueReusableCell(withReuseIdentifier: "placehodertmpcell", for: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if let d = originalDelegate as? UICollectionViewDelegateFlowLayout {
+        if let d = originalDelegate as? UICollectionViewDelegateFlowLayout, !d.isEqual(self) {
             return d.collectionView?(collectionView, layout: collectionViewLayout, sizeForItemAt: indexPath) ?? collectionView.bounds.size
         }
         
@@ -225,21 +199,21 @@ extension CarouselCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        if let d = originalDelegate as? UICollectionViewDelegateFlowLayout {
+        if let d = originalDelegate as? UICollectionViewDelegateFlowLayout, !d.isEqual(self) {
             return d.collectionView?(collectionView, layout: collectionViewLayout, minimumLineSpacingForSectionAt: section) ?? 0
         }
         return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        if let d = originalDelegate as? UICollectionViewDelegateFlowLayout {
+        if let d = originalDelegate as? UICollectionViewDelegateFlowLayout, !d.isEqual(self) {
             return d.collectionView?(collectionView, layout: collectionViewLayout, minimumInteritemSpacingForSectionAt: section) ?? 0
         }
         return 0
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        if let d = originalDelegate {
+        if let d = originalDelegate, !d.isEqual(self) {
             d.scrollViewWillBeginDragging?(scrollView)
         }
         if !isSetupedPosition {
@@ -252,7 +226,7 @@ extension CarouselCollectionView {
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        if let d = originalDelegate {
+        if let d = originalDelegate, !d.isEqual(self) {
             d.scrollViewDidEndScrollingAnimation?(scrollView)
         }
         
@@ -261,7 +235,7 @@ extension CarouselCollectionView {
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if let d = originalDelegate {
+        if let d = originalDelegate, !d.isEqual(self) {
             d.scrollViewDidEndDecelerating?(scrollView)
         }
         resetAnimation()
@@ -269,7 +243,7 @@ extension CarouselCollectionView {
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if let d = originalDelegate {
+        if let d = originalDelegate, !d.isEqual(self) {
             d.scrollViewDidEndDragging?(scrollView, willDecelerate: decelerate)
         }
         
