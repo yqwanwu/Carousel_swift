@@ -27,13 +27,14 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         
     }
     
+    var increaseRow = 1
+    
     lazy var timer: Timer = {
         let t = Timer.scheduledTimer(self.timing, action: { [unowned self] (t) in
-            //todo 增加timer
             if self.itemCount <= 0 {
                 return
             }
-            let idx = IndexPath(row: self.currentIndexPath.row + 1, section: self.currentIndexPath.section)
+            let idx = IndexPath(row: self.currentIndexPath.row + self.increaseRow, section: self.currentIndexPath.section)
             self.currentIndexPath = idx
             self.scrollToItem(at: idx, at: self.scrollDirection == .horizontal ? .centeredHorizontally : .centeredVertically, animated: true)
             self.pageControl.currentPage = self.currentIndexPath.row % self.itemCount
@@ -117,14 +118,12 @@ class CarouselCollectionView: UICollectionView, UICollectionViewDelegate, UIColl
         pageControl.hidesForSinglePage = true
         pageControl.isUserInteractionEnabled = false
         timer.fireDate = Date().addingTimeInterval(self.timing)
-        
-        //连续滑动网络图片显示不正常，
+        self.superview?.addSubview(pageControl)
         //        self.isPagingEnabled = true
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.superview?.addSubview(pageControl)
         pageControl.frame = CGRect(x: 0, y: self.frame.maxY - 25, width: self.frame.width, height: 20)
     }
     
